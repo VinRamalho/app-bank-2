@@ -14,7 +14,7 @@ export class Transaction extends DataModel {
   @ApiProperty()
   @IsNotEmpty()
   @Column('decimal', { precision: 10, scale: 2 })
-  amount: number;
+  amount: number; // in cents
 
   @ApiProperty()
   @IsNotEmpty()
