@@ -24,7 +24,10 @@ export class TransactionService extends Crud<Transaction> {
     { accountId, amount, type }: TransactionCreateDto,
     userId: string,
   ) {
-    const account = await this.accountService.findOne({where:  {id: accountId}, relations: ['user']});
+    const account = await this.accountService.findOne({
+      where: { id: accountId },
+      relations: ['user'],
+    });
 
     if (!account) {
       throw new NotFoundException('Account not found');
@@ -38,18 +41,19 @@ export class TransactionService extends Crud<Transaction> {
       );
     }
 
-    // Verifica se a transação é válida com base no tipo
-    const newBalance = this.getBalance(amount, balance, type);
-    if (newBalance < 0) {
-      throw new ForbiddenException('Insufficient funds');
-    }
+    const newBalance = this.getBalance(amount, +balance, type);
 
     // Verifica se o saldo total, incluindo o limite de crédito, é suficiente
-    if (balance + user.creditLimit < amount && type === TransactionType.TAKE) {
+    if (
+      Number(balance) + Number(user.creditLimit) < amount &&
+      type === TransactionType.TAKE
+    ) {
       throw new ForbiddenException('You cannot make this transaction');
     }
 
-    await this.accountService.update(accountId, { balance: newBalance });
+    await this.accountService.update(accountId, {
+      balance: newBalance,
+    });
 
     return await this.create({
       amount,
