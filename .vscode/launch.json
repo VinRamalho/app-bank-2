@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "name": "api",
+      "request": "launch",
+      "command": "npm run start:debug",
+      "cwd": "${workspaceRoot}"
+    }
+  ]
+}
