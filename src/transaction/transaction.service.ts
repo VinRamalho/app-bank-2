@@ -24,7 +24,7 @@ export class TransactionService extends Crud<Transaction> {
     { accountId, amount, type }: TransactionCreateDto,
     userId: string,
   ) {
-    const account = await this.accountService.findById(accountId, ['user']);
+    const account = await this.accountService.findOne({where:  {id: accountId}, relations: ['user']});
 
     if (!account) {
       throw new NotFoundException('Account not found');

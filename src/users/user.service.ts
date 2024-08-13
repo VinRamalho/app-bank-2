@@ -30,10 +30,10 @@ export class UserService extends Crud<User> {
   }
 
   async findByDocument(document: string): Promise<User | undefined> {
-    return await super.findDataByField({ document });
+    return await super.findOne({ where: {document} });
   }
 
   async findById(id: string): Promise<User | undefined> {
-    return await super.findDataById(id);
+    return await super.findOne({where: {id}});
   }
 }
