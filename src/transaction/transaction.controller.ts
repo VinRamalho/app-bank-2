@@ -39,7 +39,7 @@ export class TransactionController {
   @ApiBearerAuth('Authorization')
   async findAll() {
     try {
-      return await this.transactionService.findAll();
+      return await this.transactionService.find();
     } catch (err: any) {
       console.error('ERR', err);
       throw err;
