@@ -14,7 +14,7 @@ export abstract class Crud<T> extends Data<T> {
   }
 
   async find(
-    options: FindManyOptions<T>,
+    options?: FindManyOptions<T>,
   ): Promise<T[]> {
     
 
@@ -22,7 +22,7 @@ export abstract class Crud<T> extends Data<T> {
   }
 
   async findOne(
-    options: FindOneOptions<T>,
+    options?: FindOneOptions<T>,
   ): Promise<T> {
     
 

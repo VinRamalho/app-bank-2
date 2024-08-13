@@ -24,14 +24,14 @@ export abstract class Data<T> {
   }
 
   protected async findData(
-    options: FindManyOptions<T>,
+    options?: FindManyOptions<T>,
   ): Promise<T[]> {
 
     return await this.repository.find(options);
   }
 
   protected async findOneData(
-    options: FindOneOptions<T>,
+    options?: FindOneOptions<T>,
   ): Promise<T> {
 
     return await this.repository.findOne(options);
