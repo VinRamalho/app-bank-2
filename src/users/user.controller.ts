@@ -33,7 +33,7 @@ export class UserController {
   @ApiBearerAuth('Authorization')
   async findAll() {
     try {
-      return await this.userService.findAll();
+      return await this.userService.find();
     } catch (err: any) {
       console.error('ERR', err);
       throw err;

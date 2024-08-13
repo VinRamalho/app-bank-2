@@ -49,7 +49,10 @@ export class AccountController {
     const { id: userId } = req.user as ITokenPayload;
 
     try {
-      const res = await this.accountService.findById(id, ['user']);
+      const res = await this.accountService.findOne({
+        where: { id },
+        relations: ['user'],
+      });
       if (!res) {
         throw new NotFoundException(`Not found Account: ${id}`);
       }

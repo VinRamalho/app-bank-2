@@ -39,7 +39,7 @@ export class TransactionController {
   @ApiBearerAuth('Authorization')
   async findAll() {
     try {
-      return await this.transactionService.findAll();
+      return await this.transactionService.find();
     } catch (err: any) {
       console.error('ERR', err);
       throw err;
@@ -50,7 +50,7 @@ export class TransactionController {
   @ApiBearerAuth('Authorization')
   async find(@Param('id') id: string) {
     try {
-      const res = await this.transactionService.findById(id);
+      const res = await this.transactionService.findOne({where: {id}});
       if (!res) {
         throw new NotFoundException(`Not found Transaction: ${id}`);
       }
