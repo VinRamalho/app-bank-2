@@ -10,12 +10,14 @@ import {
 import { TransactionCreateDto } from './dto/transaction.dto';
 import { TransactionService } from './transaction.service';
 import { ITokenPayload } from 'src/auth/dto/auth.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('transaction')
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
   @Post()
+  @ApiBearerAuth('Authorization')
   async create(
     @Body() createTransactionDto: TransactionCreateDto,
     @Request() req,
@@ -34,6 +36,7 @@ export class TransactionController {
   }
 
   @Get()
+  @ApiBearerAuth('Authorization')
   async findAll() {
     try {
       return await this.transactionService.findAll();
@@ -44,6 +47,7 @@ export class TransactionController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('Authorization')
   async find(@Param('id') id: string) {
     try {
       const res = await this.transactionService.findById(id);

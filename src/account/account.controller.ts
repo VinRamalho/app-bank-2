@@ -13,12 +13,14 @@ import {
 import { AccountDto } from './dto/account.dto';
 import { AccountService } from './account.service';
 import { ITokenPayload } from 'src/auth/dto/auth.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @Post()
+  @ApiBearerAuth('Authorization')
   async create(@Body() createAccountDto: AccountDto, @Request() req) {
     const { id } = req.user as ITokenPayload;
     try {
@@ -30,6 +32,7 @@ export class AccountController {
   }
 
   @Get()
+  @ApiBearerAuth('Authorization')
   async findAll(@Request() req) {
     const { id } = req.user as ITokenPayload;
     try {
@@ -41,6 +44,7 @@ export class AccountController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('Authorization')
   async find(@Param('id') id: string, @Request() req) {
     const { id: userId } = req.user as ITokenPayload;
 
@@ -69,6 +73,7 @@ export class AccountController {
   }
 
   @Put(':id')
+  @ApiBearerAuth('Authorization')
   async update(@Param('id') id: string, @Body() updateAccountDto: AccountDto) {
     try {
       const res = await this.accountService.update(id, updateAccountDto);
@@ -83,6 +88,7 @@ export class AccountController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('Authorization')
   async remove(@Param('id') id: string) {
     try {
       const res = await this.accountService.delete(id);

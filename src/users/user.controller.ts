@@ -12,6 +12,7 @@ import {
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
 import { Public } from 'src/auth/constants/constants';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -29,6 +30,7 @@ export class UserController {
   }
 
   @Get()
+  @ApiBearerAuth('Authorization')
   async findAll() {
     try {
       return await this.userService.findAll();
@@ -39,6 +41,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('Authorization')
   async find(@Param('id') id: string) {
     try {
       const res = await this.userService.findById(id);
@@ -53,6 +56,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @ApiBearerAuth('Authorization')
   async update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
     try {
       throw new ForbiddenException('You are not allowed to do this');
@@ -68,6 +72,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('Authorization')
   async remove(@Param('id') id: string) {
     try {
       const res = await this.userService.delete(id);
