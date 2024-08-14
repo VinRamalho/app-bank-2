@@ -17,21 +17,33 @@ export abstract class Data<T> {
 
     const model = this.repository.create({ ...entity, status });
 
-    const res = await this.repository.save(model);
+    try {
+      const res = await this.repository.save(model);
 
-    return res;
+      return res;
+    } catch (err) {
+      return this.validNotFound(err);
+    }
   }
 
   protected async findData(options?: FindManyOptions<T>): Promise<T[]> {
-    const res = await this.repository.find(options);
+    try {
+      const res = await this.repository.find(options);
 
-    return res;
+      return res;
+    } catch (err) {
+      return this.validNotFound(err);
+    }
   }
 
   protected async findOneData(options?: FindOneOptions<T>): Promise<T> {
-    const res = await this.repository.findOne(options);
+    try {
+      const res = await this.repository.findOne(options);
 
-    return res;
+      return res;
+    } catch (err) {
+      return this.validNotFound(err);
+    }
   }
 
   protected async updateData(
@@ -58,7 +70,7 @@ export abstract class Data<T> {
   }
 
   private validNotFound(err: any) {
-    if (err.name === 'EntityNotFound') {
+    if (err.code === '22P02') {
       return undefined;
     } else {
       console.error('###ERR', err);
