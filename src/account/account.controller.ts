@@ -14,8 +14,8 @@ import { AccountDto } from './dto/account.dto';
 import { AccountService } from './account.service';
 import { ITokenPayload } from 'src/auth/dto/auth.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { Roles } from 'src/permission/decorators/roles.decorator';
-import { Role } from 'src/permission/dto/permission.dto';
+import { Permission } from 'src/permission/dto/permission.dto';
+import { Permissions } from 'src/permission/decorators/permission.decorator';
 
 @Controller('account')
 export class AccountController {
@@ -23,6 +23,7 @@ export class AccountController {
 
   @Post()
   @ApiBearerAuth('Authorization')
+  @Permissions(Permission.CREATE)
   async create(@Body() createAccountDto: AccountDto, @Request() req) {
     const { id } = req.user as ITokenPayload;
     try {
@@ -37,7 +38,7 @@ export class AccountController {
 
   @Get()
   @ApiBearerAuth('Authorization')
-  @Roles(Role.ADMIN)
+  @Permissions(Permission.READ)
   async findAll(@Request() req) {
     const { id } = req.user as ITokenPayload;
     try {
@@ -52,6 +53,7 @@ export class AccountController {
 
   @Get(':id')
   @ApiBearerAuth('Authorization')
+  @Permissions(Permission.READ)
   async find(@Param('id') id: string, @Request() req) {
     const { id: userId } = req.user as ITokenPayload;
 
@@ -84,8 +86,30 @@ export class AccountController {
 
   @Put(':id')
   @ApiBearerAuth('Authorization')
-  async update(@Param('id') id: string, @Body() updateAccountDto: AccountDto) {
+  @Permissions(Permission.UPDATE)
+  async update(
+    @Param('id') id: string,
+    @Body() updateAccountDto: AccountDto,
+    @Request() req,
+  ) {
+    const { id: userId } = req.user as ITokenPayload;
+
     try {
+      const account = await this.accountService.findOne({
+        where: { id },
+        relations: ['user'],
+        select: ['user'],
+      });
+      if (!account) {
+        throw new NotFoundException(`Not found Account: ${id}`);
+      }
+
+      const { user } = account;
+
+      if (user.id !== userId) {
+        throw new UnauthorizedException('Oops! you are not allowed to do this');
+      }
+
       const res = await this.accountService.update(id, updateAccountDto);
       if (!res) {
         throw new NotFoundException(`Not found Account: ${id}`);
@@ -99,14 +123,10 @@ export class AccountController {
 
   @Delete(':id')
   @ApiBearerAuth('Authorization')
+  @Permissions(Permission.DELETE)
   async remove(@Param('id') id: string) {
     try {
-      const res = await this.accountService.delete(id);
-
-      // if (!res) {
-      //   throw new NotFoundException(`Not found Account: ${id}`);
-      // }
-      return res;
+      await this.accountService.delete(id);
     } catch (err: any) {
       console.error('ERR', err);
       throw err;

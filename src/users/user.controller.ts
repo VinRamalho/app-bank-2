@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   NotFoundException,
   Param,
@@ -13,6 +12,9 @@ import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
 import { Public } from 'src/auth/constants/constants';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Permission, Role } from 'src/permission/dto/permission.dto';
+import { Permissions } from 'src/permission/decorators/permission.decorator';
+import { Roles } from 'src/permission/decorators/roles.decorator';
 
 @Controller('user')
 export class UserController {
@@ -33,6 +35,7 @@ export class UserController {
 
   @Get()
   @ApiBearerAuth('Authorization')
+  @Permissions(Permission.READ)
   async findAll() {
     try {
       const res = await this.userService.find();
@@ -46,6 +49,7 @@ export class UserController {
 
   @Get(':id')
   @ApiBearerAuth('Authorization')
+  @Permissions(Permission.READ)
   async find(@Param('id') id: string) {
     try {
       const res = await this.userService.findById(id);
@@ -61,9 +65,9 @@ export class UserController {
 
   @Put(':id')
   @ApiBearerAuth('Authorization')
+  @Roles(Role.ADMIN)
   async update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
     try {
-      throw new ForbiddenException('You are not allowed to do this');
       const res = await this.userService.update(id, updateUserDto);
       if (!res) {
         throw new NotFoundException(`Not found User: ${id}`);
@@ -77,14 +81,10 @@ export class UserController {
 
   @Delete(':id')
   @ApiBearerAuth('Authorization')
+  @Permissions(Permission.DELETE)
   async remove(@Param('id') id: string) {
     try {
-      const res = await this.userService.delete(id);
-
-      // if (!res) {
-      //   throw new NotFoundException(`Not found User: ${id}`);
-      // }
-      return res;
+      await this.userService.delete(id);
     } catch (err: any) {
       console.error('ERR', err);
       throw err;

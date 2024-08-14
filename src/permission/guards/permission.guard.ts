@@ -32,11 +32,11 @@ export class PermissionGuard implements CanActivate {
       userRoles.map((role) => this.permissionService.getByRole(role)),
     );
 
-    const userHasRequiredRole = roles.some((e) => {
-      for (const permission of e.permissions) {
-        return requiredPermission.includes(permission);
-      }
-    });
+    const userHasRequiredRole = roles.some((role) =>
+      role.permissions.some((permission) =>
+        requiredPermission.includes(permission),
+      ),
+    );
 
     return userHasRequiredRole;
   }
