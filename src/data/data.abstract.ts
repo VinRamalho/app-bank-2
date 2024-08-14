@@ -4,9 +4,6 @@ import {
   FindManyOptions,
   FindOneOptions,
   DeepPartial,
-  In,
-  FindOptionsWhere,
-  FindOptions,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { DataStatus } from './entities/data.entity';

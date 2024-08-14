@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, DeepPartial, FindOptionsWhere, FindManyOptions, FindOneOptions } from 'typeorm';
+import {
+  Repository,
+  DeepPartial,
+  FindManyOptions,
+  FindOneOptions,
+} from 'typeorm';
 import { Data } from 'src/data/data.abstract';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -13,19 +18,11 @@ export abstract class Crud<T> extends Data<T> {
     return await super.createData(entity);
   }
 
-  async find(
-    options?: FindManyOptions<T>,
-  ): Promise<T[]> {
-    
-
+  async find(options?: FindManyOptions<T>): Promise<T[]> {
     return await super.findData(options);
   }
 
-  async findOne(
-    options?: FindOneOptions<T>,
-  ): Promise<T> {
-    
-
+  async findOne(options?: FindOneOptions<T>): Promise<T> {
     return await super.findOneData(options);
   }
 
