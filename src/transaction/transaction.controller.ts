@@ -50,7 +50,7 @@ export class TransactionController {
   @ApiBearerAuth('Authorization')
   async find(@Param('id') id: string) {
     try {
-      const res = await this.transactionService.findOne({where: {id}});
+      const res = await this.transactionService.findOne({ where: { id } });
       if (!res) {
         throw new NotFoundException(`Not found Transaction: ${id}`);
       }

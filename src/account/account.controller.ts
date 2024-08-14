@@ -14,6 +14,8 @@ import { AccountDto } from './dto/account.dto';
 import { AccountService } from './account.service';
 import { ITokenPayload } from 'src/auth/dto/auth.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from 'src/permission/decorators/roles.decorator';
+import { Role } from 'src/permission/dto/permission.dto';
 
 @Controller('account')
 export class AccountController {
@@ -33,6 +35,7 @@ export class AccountController {
 
   @Get()
   @ApiBearerAuth('Authorization')
+  @Roles(Role.ADMIN)
   async findAll(@Request() req) {
     const { id } = req.user as ITokenPayload;
     try {

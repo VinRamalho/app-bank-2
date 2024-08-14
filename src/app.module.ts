@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthGuard } from './auth/guards/auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './users/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccountModule } from './account/account.module';
 import { TransactionModule } from './transaction/transaction.module';
+import { CompositeGuard } from './guards/composite.guard';
+import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -26,13 +27,14 @@ import { TransactionModule } from './transaction/transaction.module';
     AuthModule,
     AccountModule,
     TransactionModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useClass: CompositeGuard,
     },
   ],
 })
