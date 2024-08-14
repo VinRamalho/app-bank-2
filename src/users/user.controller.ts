@@ -22,7 +22,9 @@ export class UserController {
   @Post()
   async create(@Body() createUserDto: UserDto) {
     try {
-      return await this.userService.create(createUserDto);
+      const res = await this.userService.create(createUserDto);
+
+      return res;
     } catch (err: any) {
       console.error('ERR', err);
       throw err;
@@ -33,7 +35,9 @@ export class UserController {
   @ApiBearerAuth('Authorization')
   async findAll() {
     try {
-      return await this.userService.find();
+      const res = await this.userService.find();
+
+      return res;
     } catch (err: any) {
       console.error('ERR', err);
       throw err;

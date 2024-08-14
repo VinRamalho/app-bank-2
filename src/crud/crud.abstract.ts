@@ -15,25 +15,35 @@ export abstract class Crud<T> extends Data<T> {
   }
 
   async create(entity: DeepPartial<T>): Promise<T> {
-    return await super.createData(entity);
+    const res = await super.createData(entity);
+
+    return res;
   }
 
   async find(options?: FindManyOptions<T>): Promise<T[]> {
-    return await super.findData(options);
+    const res = await super.findData(options);
+
+    return res;
   }
 
   async findOne(options?: FindOneOptions<T>): Promise<T> {
-    return await super.findOneData(options);
+    const res = await super.findOneData(options);
+
+    return res;
   }
 
   async update(
     id: string,
     updateEntity: QueryDeepPartialEntity<T>,
   ): Promise<T | undefined> {
-    return await super.updateData(id, updateEntity);
+    const res = await super.updateData(id, updateEntity);
+
+    return res;
   }
 
   async delete(id: string): Promise<void> {
-    return await super.deleteData(id);
+    const res = await super.deleteData(id);
+
+    return res;
   }
 }

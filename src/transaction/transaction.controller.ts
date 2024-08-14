@@ -25,10 +25,12 @@ export class TransactionController {
     const { id: userId } = req.user as ITokenPayload;
 
     try {
-      return await this.transactionService.createTransaction(
+      const res = await this.transactionService.createTransaction(
         createTransactionDto,
         userId,
       );
+
+      return res;
     } catch (err: any) {
       console.error('ERR', err);
       throw err;
@@ -39,7 +41,9 @@ export class TransactionController {
   @ApiBearerAuth('Authorization')
   async findAll() {
     try {
-      return await this.transactionService.find();
+      const res = await this.transactionService.find();
+
+      return res;
     } catch (err: any) {
       console.error('ERR', err);
       throw err;

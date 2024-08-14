@@ -22,7 +22,10 @@ export class AuthController {
   @Post('login')
   async signIn(@Body() auth: AuthDto) {
     const { username, password } = auth;
-    return await this.authService.signIn(username, password);
+
+    const res = await this.authService.signIn(username, password);
+
+    return res;
   }
 
   @UseGuards(AuthGuard)

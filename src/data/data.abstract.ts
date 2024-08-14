@@ -17,15 +17,21 @@ export abstract class Data<T> {
 
     const model = this.repository.create({ ...entity, status });
 
-    return await this.repository.save(model);
+    const res = await this.repository.save(model);
+
+    return res;
   }
 
   protected async findData(options?: FindManyOptions<T>): Promise<T[]> {
-    return await this.repository.find(options);
+    const res = await this.repository.find(options);
+
+    return res;
   }
 
   protected async findOneData(options?: FindOneOptions<T>): Promise<T> {
-    return await this.repository.findOne(options);
+    const res = await this.repository.findOne(options);
+
+    return res;
   }
 
   protected async updateData(
@@ -35,7 +41,9 @@ export abstract class Data<T> {
     try {
       await this.repository.update(id, updateEntity);
 
-      return await this.repository.findOne({ where: { id } as any });
+      const res = await this.repository.findOne({ where: { id } as any });
+
+      return res;
     } catch (err) {
       return this.validNotFound(err);
     }

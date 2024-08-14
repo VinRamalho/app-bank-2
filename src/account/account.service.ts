@@ -32,13 +32,17 @@ export class AccountService extends Crud<Account> {
       accountNumber,
     };
 
-    return await super.createData(account);
+    const res = await super.createData(account);
+
+    return res;
   }
 
   async findByUserId(userId: string): Promise<Account[]> {
-    return await this.accountRepository.find({
+    const res = await this.accountRepository.find({
       where: { user: { id: userId } },
     });
+
+    return res;
   }
 
   private async generateAccountNumber(userId: string): Promise<string> {

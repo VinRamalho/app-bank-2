@@ -26,14 +26,20 @@ export class UserService extends Crud<User> {
       password: passwordHash,
     };
 
-    return await super.createData(user);
+    const res = await super.createData(user);
+
+    return res;
   }
 
   async findByDocument(document: string): Promise<User | undefined> {
-    return await super.findOne({ where: {document} });
+    const res = await super.findOne({ where: { document } });
+
+    return res;
   }
 
   async findById(id: string): Promise<User | undefined> {
-    return await super.findOne({where: {id}});
+    const res = await super.findOne({ where: { id } });
+
+    return res;
   }
 }

@@ -55,11 +55,13 @@ export class TransactionService extends Crud<Transaction> {
       balance: newBalance,
     });
 
-    return await this.create({
+    const res = await this.create({
       amount,
       type,
       account,
     });
+
+    return res;
   }
 
   private getBalance(

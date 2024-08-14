@@ -26,7 +26,9 @@ export class AccountController {
   async create(@Body() createAccountDto: AccountDto, @Request() req) {
     const { id } = req.user as ITokenPayload;
     try {
-      return await this.accountService.createAccount(createAccountDto, id);
+      const res = await this.accountService.createAccount(createAccountDto, id);
+
+      return res;
     } catch (err: any) {
       console.error('ERR', err);
       throw err;
@@ -39,7 +41,9 @@ export class AccountController {
   async findAll(@Request() req) {
     const { id } = req.user as ITokenPayload;
     try {
-      return await this.accountService.findByUserId(id);
+      const res = await this.accountService.findByUserId(id);
+
+      return res;
     } catch (err: any) {
       console.error('ERR', err);
       throw err;
