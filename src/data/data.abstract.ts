@@ -73,7 +73,6 @@ export abstract class Data<T> {
     if (err.code === '22P02') {
       return undefined;
     } else {
-      console.error('###ERR', err);
       throw err;
     }
   }
