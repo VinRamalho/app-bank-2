@@ -46,4 +46,8 @@ export abstract class Crud<T> extends Data<T> {
 
     return res;
   }
+
+  protected getRepository(): Repository<T> {
+    return super.getRepositoryData();
+  }
 }
