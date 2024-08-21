@@ -69,6 +69,10 @@ export abstract class Data<T> {
     }
   }
 
+  protected getRepositoryData(): Repository<T> {
+    return this.repository;
+  }
+
   private validNotFound(err: any) {
     if (err.code === '22P02') {
       return undefined;

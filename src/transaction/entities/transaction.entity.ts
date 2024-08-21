@@ -16,7 +16,13 @@ export class Transaction extends DataModel {
   @Column('decimal', { precision: 10, scale: 2 })
   amount: number; // in cents
 
-  @ApiProperty()
+  @ApiProperty({
+    description: `O tipo da transação. Pode ser um dos seguintes valores:
+    - DEPOSIT (0): Representa um depósito.
+    - TAKE (1): Representa uma retirada.`,
+    enum: TransactionType,
+    example: TransactionType.DEPOSIT, // Ajuste conforme necessário
+  })
   @IsNotEmpty()
   @IsEnum(TransactionType)
   @Column({

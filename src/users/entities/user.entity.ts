@@ -26,7 +26,14 @@ export class User extends DataModel {
   @Column()
   password: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: `Lista de 'roles' atribuídos ao usuário. Cada 'role' pode ter diferentes permissões associadas.
+    Exemplos:
+    - Role: 'admin'
+      Permissões: [CREATE, READ, UPDATE, DELETE]
+    - Role: 'user'
+      Permissões: [CREATE, READ]`,
+  })
   @IsNotEmpty()
   @Column('simple-array')
   roles: string[];
