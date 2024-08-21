@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -24,6 +25,10 @@ export class TransactionService extends Crud<Transaction> {
     { accountId, amount, type }: TransactionCreateDto,
     userId: string,
   ) {
+    if (amount <= 0) {
+      throw new BadRequestException('Amount must be greater than 0');
+    }
+
     const account = await this.accountService.findOne({
       where: { id: accountId },
       relations: ['user'],
@@ -44,18 +49,18 @@ export class TransactionService extends Crud<Transaction> {
     const newBalance = this.getBalance(amount, balance, type);
 
     // Verifica se o saldo total, incluindo o limite de crédito, é suficiente
-    if (balance + user.creditLimit < amount && type === TransactionType.TAKE) {
+    if (type === TransactionType.TAKE && balance + user.creditLimit < amount) {
       throw new ForbiddenException('You cannot make this transaction');
     }
-
-    await this.accountService.update(accountId, {
-      balance: newBalance,
-    });
 
     const res = await this.create({
       amount,
       type,
       account,
+    });
+
+    await this.accountService.update(accountId, {
+      balance: newBalance,
     });
 
     return res;
