@@ -41,13 +41,10 @@ export class TransactionService extends Crud<Transaction> {
       );
     }
 
-    const newBalance = this.getBalance(amount, +balance, type);
+    const newBalance = this.getBalance(amount, balance, type);
 
     // Verifica se o saldo total, incluindo o limite de crédito, é suficiente
-    if (
-      Number(balance) + Number(user.creditLimit) < amount &&
-      type === TransactionType.TAKE
-    ) {
+    if (balance + user.creditLimit < amount && type === TransactionType.TAKE) {
       throw new ForbiddenException('You cannot make this transaction');
     }
 

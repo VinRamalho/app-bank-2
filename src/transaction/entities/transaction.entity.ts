@@ -13,7 +13,13 @@ export enum TransactionType {
 export class Transaction extends DataModel {
   @ApiProperty()
   @IsNotEmpty()
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('bigint', {
+    default: 0,
+    transformer: {
+      to: (value: number) => Math.round(value * 100), // Converte reais para centavos antes de salvar
+      from: (value: number) => value / 100, // Converte centavos para reais ao recuperar
+    },
+  })
   amount: number; // in cents
 
   @ApiProperty({

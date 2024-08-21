@@ -15,7 +15,13 @@ export class Account extends DataModel {
 
   @IsNotEmpty()
   @ApiProperty()
-  @Column('decimal', { precision: 10, scale: 2, default: 0 })
+  @Column('bigint', {
+    default: 0,
+    transformer: {
+      to: (value: number) => Math.round(value * 100), // Convert reais to cents before saving
+      from: (value: number) => value / 100, // Converts cents to reais when recovering
+    },
+  })
   balance: number;
 
   @ManyToOne(() => User, (user) => user.accounts)
