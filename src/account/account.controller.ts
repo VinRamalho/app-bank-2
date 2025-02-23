@@ -76,7 +76,7 @@ export class AccountController {
         balance,
         accountNumber,
         nameUser: user.name,
-        documentUser: user.document,
+        username: user.username,
       };
     } catch (err: any) {
       console.error('ERR', err);

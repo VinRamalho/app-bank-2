@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   async signIn(username: string, password: string) {
-    const user = await this.userService.findByDocument(username);
+    const user = await this.userService.findByUsername(username);
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -55,7 +55,7 @@ export class AuthService {
         secret: jwtConstants.secret,
       });
 
-      const user = await this.userService.findByDocument(decoded.email);
+      const user = await this.userService.findByUsername(decoded.email);
 
       if (!user) {
         throw new UnauthorizedException('Invalid refresh token');

@@ -14,7 +14,7 @@ export class User extends DataModel {
   @ApiProperty()
   @IsNotEmpty()
   @Column({ unique: true })
-  document: string;
+  username: string;
 
   @ApiProperty()
   @IsNotEmpty()
