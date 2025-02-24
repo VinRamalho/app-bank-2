@@ -6,7 +6,7 @@ export class AuthDto {
   username: string;
 
   @ApiProperty()
-  password: string;
+  pass: string;
 }
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
