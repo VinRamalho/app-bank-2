@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -16,8 +17,9 @@ import { ITokenPayload } from 'src/auth/dto/auth.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Permission } from 'src/permission/dto/permission.dto';
 import { Permissions } from 'src/permission/decorators/permission.decorator';
+import { Account } from './entities/account.entity';
 
-@Controller('account')
+@Controller('balance')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
@@ -26,10 +28,23 @@ export class AccountController {
   @Permissions(Permission.CREATE)
   async create(@Body() createAccountDto: AccountDto, @Request() req) {
     const { id } = req.user as ITokenPayload;
-    try {
-      const res = await this.accountService.createAccount(createAccountDto, id);
+    const { destination, ...rest } = createAccountDto;
+    const data = { ...rest, accountNumber: destination } as Account;
 
-      return res;
+    try {
+      const res = await this.accountService.findOne({
+        where: { accountNumber: destination },
+        relations: ['user'],
+      });
+
+      if (res) {
+        throw new BadRequestException(`Account ${destination} already exists`);
+      }
+
+      const { balance, accountNumber } =
+        await this.accountService.createAccount(data, id);
+
+      return { destination: { id: accountNumber, balance: balance } };
     } catch (err: any) {
       console.error('ERR', err);
       throw err;
@@ -51,19 +66,19 @@ export class AccountController {
     }
   }
 
-  @Get(':id')
+  @Get(':account')
   @ApiBearerAuth('Authorization')
   @Permissions(Permission.READ)
-  async find(@Param('id') id: string, @Request() req) {
+  async find(@Param('account') account: string, @Request() req) {
     const { id: userId } = req.user as ITokenPayload;
 
     try {
       const res = await this.accountService.findOne({
-        where: { id },
+        where: { accountNumber: account },
         relations: ['user'],
       });
       if (!res) {
-        throw new NotFoundException(`Not found Account: ${id}`);
+        throw new NotFoundException(`Not found Account: ${account}`);
       }
 
       const { user, balance, accountNumber } = res;
@@ -75,7 +90,6 @@ export class AccountController {
       return {
         balance,
         accountNumber,
-        nameUser: user.name,
         username: user.username,
       };
     } catch (err: any) {

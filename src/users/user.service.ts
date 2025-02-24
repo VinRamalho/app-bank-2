@@ -42,4 +42,8 @@ export class UserService extends Crud<User> {
 
     return res;
   }
+
+  get Repository(): Repository<User> {
+    return super.RepositoryData;
+  }
 }

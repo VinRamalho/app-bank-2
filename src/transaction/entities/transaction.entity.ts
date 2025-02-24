@@ -5,8 +5,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty } from 'class-validator';
 
 export enum TransactionType {
-  DEPOSIT = 0,
-  TAKE = 1,
+  DEPOSIT = 'deposit',
+  TAKE = 'withdraw',
+  TRANSFER = 'transfer',
 }
 
 @Entity('transactions')
@@ -25,14 +26,15 @@ export class Transaction extends DataModel {
   @ApiProperty({
     description: `O tipo da transação. Pode ser um dos seguintes valores:
     - DEPOSIT (0): Representa um depósito.
-    - TAKE (1): Representa uma retirada.`,
+    - WITHDRAW (1): Representa uma retirada.
+    - TRANSFER (2): Representa uma transferência.`,
     enum: TransactionType,
     example: TransactionType.DEPOSIT, // Ajuste conforme necessário
   })
-  @IsNotEmpty()
   @IsEnum(TransactionType)
+  @IsNotEmpty()
   @Column({
-    type: 'numeric',
+    type: 'enum',
     enum: TransactionType,
   })
   type: TransactionType;

@@ -69,7 +69,7 @@ export abstract class Data<T> {
     }
   }
 
-  protected getRepositoryData(): Repository<T> {
+  protected get RepositoryData(): Repository<T> {
     return this.repository;
   }
 

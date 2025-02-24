@@ -14,7 +14,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { Permissions } from 'src/permission/decorators/permission.decorator';
 import { Permission } from 'src/permission/dto/permission.dto';
 
-@Controller('transaction')
+@Controller('event')
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
@@ -28,7 +28,7 @@ export class TransactionController {
     const { id: userId } = req.user as ITokenPayload;
 
     try {
-      const res = await this.transactionService.createTransaction(
+      const res = await this.transactionService.handleTransaction(
         createTransactionDto,
         userId,
       );

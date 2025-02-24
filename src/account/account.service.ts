@@ -24,12 +24,9 @@ export class AccountService extends Crud<Account> {
       throw new Error('User not found');
     }
 
-    const accountNumber = await this.generateAccountNumber(userId);
-
     const account = {
       ...createAccountDto,
       user,
-      accountNumber,
     };
 
     const res = await super.createData(account);
@@ -43,21 +40,5 @@ export class AccountService extends Crud<Account> {
     });
 
     return res;
-  }
-
-  private async generateAccountNumber(userId: string): Promise<string> {
-    const lastAccount = await this.accountRepository.find({
-      where: { user: { id: userId } },
-      order: { accountNumber: 'DESC' },
-      take: 1,
-    });
-
-    const lastAccountNumber = lastAccount.length
-      ? Number(lastAccount.at(0).accountNumber)
-      : 0;
-    const newAccountNumber = (lastAccountNumber + 1)
-      .toString()
-      .padStart(4, '0');
-    return newAccountNumber;
   }
 }

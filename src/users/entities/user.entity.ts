@@ -24,6 +24,7 @@ export class User extends DataModel {
       to: (value: number) => Math.round(value * 100), // Converte reais para centavos antes de salvar
       from: (value: number) => value / 100, // Converte centavos para reais ao recuperar
     },
+    name: 'credit_limit',
   })
   creditLimit: number; // in cents
 

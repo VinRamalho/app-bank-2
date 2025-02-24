@@ -10,7 +10,7 @@ import { IsEmpty, IsNotEmpty } from 'class-validator';
 export class Account extends DataModel {
   @ApiProperty()
   @IsEmpty()
-  @Column({ name: 'account_number' })
+  @Column({ name: 'account_number', unique: true })
   accountNumber: string;
 
   @IsNotEmpty()
